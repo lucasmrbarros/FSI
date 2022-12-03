@@ -1,23 +1,16 @@
-#referencia: https://stackabuse.com/implementing-lda-in-python-with-scikit-learn/
-
 import numpy as np
 import pandas as pd
 
 #importando dados
-#url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00579/MI.data"
-#ames = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'Class']
-#dataset = pd.read_csv(url, names=names)
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00579/MI.data"
+names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'Class']
+dataset = pd.read_csv(url, names=names)
 
-dataset = pd.read_csv('MI.data', header = None)
-dataset.replace('?', 0, inplace=True)
 #processamento de dados
 
 #labels e features
-#X = dataset.iloc[:, 0:4].values #rever
-#y = dataset.iloc[:, 4].values #rever
-
-X = dataset[list(dataset.columns[0:91]) + list(dataset.columns[95:99]) + list(dataset.columns[105:113])]
-y = dataset[113]
+X = dataset.iloc[:, 0:4].values #rever
+y = dataset.iloc[:, 4].values #rever
 
 #divisao entre dados de treinamento e testes
 from sklearn.model_selection import train_test_split
@@ -32,12 +25,13 @@ X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
 #executando LDA
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as QDA
 
-lda = LDA(n_components=1)
-X_train = lda.fit_transform(X_train, y_train)
-X_test = lda.transform(X_test)
+#X_train = QDA.fit(X_train, y_train) ## QuadraticDiscriminantAnalysis.fit() missing 1 required positional argument: 'y'
+#X_test = QDA.transform(X_test)
 
+clf = QDA()
+clf.fit(X_train, y_train)
 #Treinamento e predicoes
 
 from sklearn.ensemble import RandomForestClassifier
